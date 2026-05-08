@@ -1,0 +1,1 @@
+{ "name": "Jadwal Dokter Sartika", "short_name": "jadwal dokter sartika", "icons": [ { "src": "/sartika.jpg", "sizes": "192x192", "type": "image/jpg" }, { "src": "/logosartika.png", "sizes": "512x512", "type": "image/jpg" } ], "start_url": "/", "display": "standalone", "background_color": "#000000", "theme_color": "#dc2626" }

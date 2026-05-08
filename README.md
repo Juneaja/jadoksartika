@@ -1,2 +1,2 @@
-# jadoksartika
-jadwal dokter
+# jadok
+Jadwal Dokter

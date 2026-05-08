@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Dokter Sartika</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+          .cs-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    animation: bounce 3s infinite;
+}
+
+.cs-float a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.cs-float a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+    text-decoration: none;
+    color: white;
+}
+
+.cs-float a i {
+    font-size: 28px;
+    margin-bottom: 5px;
+    margin-top: 12px;
+}
+
+.cs-float a span {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4); }
+    50% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.7); }
+    100% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4); }
+}
+        
+     .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #ADD8E6 0%, #ADD8E6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(70, 130, 180, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        main {
+            margin-top: 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .filters {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e1e5e9;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doctor-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .doctor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .doctor-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .specialty {
+            color: #667eea;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9ff;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            background: #e8ecff;
+            transform: scale(1.02);
+        }
+
+        .schedule-time {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .schedule-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-full {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-booking {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #FF0000, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .no-schedule {
+            text-align: center;
+            padding: 3rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-box {
+                margin: 0;
+                order: 3;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        .legend {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 0 1rem;
+            font-weight: 500;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo i {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+            color: #ffd700;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .social-links {
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .whatsapp-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Floating WhatsApp */
+        .floating-whatsapp {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background: #25D366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.4);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .floating-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.6);
+            text-decoration: none;
+            color: white;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="logosartika.png" width="90℅ alt="logo sartika">
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Cari dokter atau spesialis...">
+                </div>
+               
+            </div>
+        </div>
+        <a href="https://drive.google.com/file/d/1uD9tbG6E-fG2I6U0xPsP7rVINvR41gCU/view?usp=drivesdk" download class="btn-download">
+        <i class="fas fa-download"></i>
+        Instal Aplikasi
+    </a>
+        
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">
+            <i class="fas fa-calendar-check"></i> Jadwal Dokter
+        </h1>
+
+        <div class="filters">
+            <div class="filter-group">
+                <button class="filter-btn active" data-spesialis="all">
+                    <i class="fas fa-stethoscope"></i> Semua Dokter
+                </button>
+                <button class="filter-btn" data-spesialis="umum/bpjs">
+                    <i class="fas fa-user-md"></i> Umum & BPJS
+                </button>
+                <button class="filter-btn" data-spesialis="spesialis syaraf">
+                    <i class="fas fa-baby"></i>Poli Syaraf
+                </button>
+                <button class="filter-btn" data-spesialis="penyakit dalam">
+                    <i class="fas fa-child"></i>Penyakit Dalam
+                </button>
+                <button class="filter-btn" data-spesialis="poli gigi">
+                    <i class="fas fa-tooth"></i>Poli Gigi
+                </button>
+                <button class="filter-btn" data-spesialis="spesialis tht">
+                    <i class="fas fa-child"></i>Poli THT
+                </button>
+                 <button class="filter-btn" data-spesialis="kia">
+                    <i class="fas fa-child"></i>Poli KIA
+                </button>
+                <button class="filter-btn" data-spesialis="ugd">
+                    <i class="fas fa-child"></i>UGD
+                </button>
+            </div>
+        </div>
+
+        <div class="schedule-grid" id="scheduleGrid">
+            <!-- Dokter akan dimuat oleh JavaScript -->
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="schedule-status status-available">✅ Praktik</span>
+            </div>
+            <div class="legend-item">
+                <span class="schedule-status status-booking">⏳ Daring</span>
+            </div>
+            <div class="legend-item">
+                <span class="schedule-status status-full">❌ TUTUP</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data dokter dan jadwal
+        const doctors = [
+            {
+                id: 1,
+                name: "dr. Irawan Sandjojo,Sp.N",
+                specialty: "spesialis syaraf",
+                avatar:"👨‍⚕",
+                schedules: [ 
+                    { time: "senin - sabtu | 07:00 - selesai", status: "available"}, 
+                    { time: "senin - jumat | 18:30 - selesai", status: "available" }
+                
+                ]
+            }, 
+            {
+                id: 2,
+                name: "dr. Gendut Wisito,Sp.PD",
+                specialty: "penyakit dalam",
+                avatar: "👨‍⚕",
+                schedules: [
+                    { time: "senin - kamis | 09:00 - selesai", status: "available" },
+                    { time: "senin - kamis | 18:00 - selesai", status: "available" }
+                ]
+            },
+            {
+                id: 3,
+                name: "dr. Raihatul Ambar",
+                specialty: "umum/bpjs",
+                avatar: "👩‍⚕",
+                schedules: [
+                    { time: "senin - sabtu | 07:00 - 12:00", status: "available" }
+                ]
+            },
+            {
+                id: 4,
+                name: "dr. Rani Waskita Kelana",
+                specialty: "umum/bpjs",
+                avatar: "👩‍⚕",
+                schedules: [
+                    { time: "senin - sabtu | 12:00 - 16:00", status: "available" }
+                    
+                ]
+            },
+            {
+                id: 5,
+                name: "dr. Wawang Wahyu Risdianto",
+                specialty: "umum/bpjs",
+                avatar: "👨‍⚕",
+                schedules: [
+                    { time: "senin - sabtu | 16:00 - 20:00", status: "available" }
+                ]
+            },
+            {
+                id: 6,
+                name: "drg. Camilatul Ummah",
+                specialty: "poli gigi",
+                avatar: "👩‍⚕",
+                schedules: [
+                    { time: "senin - jumat | 13:00 - 17:00", status: "available" }
+                ]
+            }, 
+            {
+                id: 7,
+                name: "POLI KIA",
+                specialty: "kia",
+                avatar: "🤰",
+                schedules: [
+                    { time: "senin - sabtu | 07:00 - 20:00", status: "available" }
+                ]
+            },
+            {
+                id: 8,
+                name: "UGD 24 JAM",
+                specialty: "ugd",
+                avatar: "🏥",
+                schedules: [
+                    { time: "BUKA SETIAP HARI 24 JAM", status: "available" }
+                ]
+            },
+
+            {
+                id: 9,
+                name: "POLI THT",
+                specialty: "spesialis tht",
+                avatar: "🦻",
+                schedules: [
+                    { time: "senin,selasa,kamis | 18:00 - selesai", status: "available" }, 
+                    { time: "rabu | 11:00 - 13:00", status: "available" }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSpesialis = 'all';
+
+        function renderDoctors(doctorsToShow = doctors) {
+            const grid = document.getElementById('scheduleGrid');
+            grid.innerHTML = '';
+
+            if (doctorsToShow.length === 0) {
+                grid.innerHTML = `
+                    <div class="doctor-card no-schedule">
+                        <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h3>Tidak ada jadwal ditemukan</h3>
+                        <p>Coba ubah filter pencarian atau spesialis</p>
+                    </div>
+                `;
+                return;
+            }
+
+            doctorsToShow.forEach(doctor => {
+                const card = document.createElement('div');
+                card.className = 'doctor-card';
+                card.innerHTML = `
+                    <div class="doctor-avatar">${doctor.avatar}</div>
+                    <div class="doctor-name">${doctor.name}</div>
+                    <div class="specialty">${doctor.specialty}</div>
+                    ${doctor.schedules.map(schedule => `
+                        <div class="schedule-item">
+                            <span class="schedule-time">${schedule.time}</span>
+                            <span class="schedule-status status-${schedule.status}">
+                                ${getStatusText(schedule.status)}
+                            </span>
+                        </div>
+                    `).join('')}
+                    <button class="book-btn" onclick="#">
+                        <i class="fas fa-calendar-plus"></i> POLI LIBUR Tanggal Merah dan Hari Libur Nasional 
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function getStatusText(status) {
+            const statusText = {
+                available: '✅ Praktik',
+                booking: '⏳ Daring/Resep',
+                full: '❌ Tutup'
+            };
+            return statusText[status] || status;
+        }
+
+        function filterDoctors() {
+            let filtered = doctors;
+
+            // Filter berdasarkan spesialis
+            if (currentSpesialis !== 'all') {
+                filtered = filtered.filter(doctor => 
+                    doctor.specialty.toLowerCase().includes(currentSpesialis)
+                );
+            }
+
+            renderDoctors(filtered);
+        }
+
+        function bookAppointment(doctorId) {
+            const doctor = doctors.find(d => d.id === doctorId);
+            alert(`✅ Booking berhasil untuk ${doctor.name}!\nSilakan hubungi klinik untuk konfirmasi.`);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = doctors.filter(doctor => 
+                doctor.name.toLowerCase().includes(searchTerm) ||
+                doctor.specialty.toLowerCase().includes(searchTerm)
+            );
+            renderDoctors(filtered);
+        });
+
+        // Filter buttons
+        document.querySelectorAll('[data-spesialis]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-spesialis]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentSpesialis = this.dataset.spesialis;
+                filterDoctors();
+            });
+        });
+
+        document.querySelectorAll('[data-filter]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initial render
+        renderDoctors();
+    </script>
+ <!-- Floating WhatsApp -->
+    <a href="https://wa.me/6285730591047?text=Halo%20Admin%20Klinik Sartika,%20saya%20ingin%20bertanya%20tentang..." class="floating-whatsapp" target="_blank" title="Chat WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <br/><br/>
+    <div class="cs-float">
+    <a href="https://sicika.vercel.app" target="_blank" title="Chat Sicika">
+        <i class="fas fa-user-md"></i>
+    </a>
+</div>
+</body>
+   
+    <footer id="kontak" class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="logo.png" width="100℅" alt="logo ngodingasik">
+                <img src="logo1.png" width="100℅" alt="logo ngodingasik">
+            </div>
+            <p>&copy; 2026 KLINIK SARTIKA | Ngoding_asik</p>
+            <div class="social-links">
+                <a href="https://wa.me/6285730591047" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@klinik.sartika.la?_r=1&_t=ZS-95IZTFbr41w"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://www.instagram.com/kliniksartikalamongan?igsh=eHd2cDRuMmFsMWRi"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@TanyaDoksartika"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+         <audio controls autoplay>
+  <source src="ngaji.mp3" type="audio/mpeg">
+  Browser Anda tidak mendukung elemen audio.
+        </audio>
+</html>
